@@ -118,4 +118,9 @@ public class Vertex<T> {
     public void setColor(Color color) {
         this.color = color;
     }
+    
+    @Override
+    public String toString() {
+    	return info.toString();
+    }
 }

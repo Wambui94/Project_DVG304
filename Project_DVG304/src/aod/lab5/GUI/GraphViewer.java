@@ -92,7 +92,6 @@ public class GraphViewer<T> extends JFrame {
         		int y = 100 + rand.nextInt(500) - 50;
         		
         		graph.addVertex(x, y, "STHLM" + i);
-        		//graph.addEdge("STHLM"+i, "STHLM"+(i+1));
         	}
         	for (int i =0; i< graph.getAllVertices().size(); i++) {
         		for(int j = i + 1; j < graph.getAllVertices().size(); j++) {
