@@ -7,6 +7,7 @@ import aod.lab5.graph.Edge;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Random;
 /**
  * Davids kommenar
  * @param <T>
@@ -78,7 +79,27 @@ public class GraphViewer<T> extends JFrame {
     // --- Testprogram ---
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Graph<String> graph = new Graph<>();
+            
+        	Graph<String> graph = new Graph<>();
+           	Random rand = new Random();
+        	for(int i = 0; i < 10; i++) {
+        		
+        		int x = 100 + rand.nextInt(500) - 50;
+        		int y = 100 + rand.nextInt(500) - 50;
+        		
+        		graph.addVertex(x, y, "STHLM" + i);
+        		//graph.addEdge("STHLM"+i, "STHLM"+(i+1));
+        	}
+        	for (int i =0; i< graph.getAllVertices().size(); i++) {
+        		for(int j = i + 1; j < graph.getAllVertices().size(); j++) {
+        			Vertex<String> v1 = graph.getAllVertices().get(i);
+        			Vertex<String> v2 = graph.getAllVertices().get(j);
+        			
+        			graph.addEdge(v1.getInfo(), v2.getInfo());
+        			
+        		}
+        	}
+        	
 
             graph.addVertex(100, 100, "A");
             graph.addVertex(200, 150, "B");
