@@ -119,6 +119,7 @@ public class GraphViewer<T> extends JFrame {
                     + result.get(city)
                 );
             }
+            System.out.println(graph.getVerticesInArea(0, 400, 0, 400)); 
 
             // Sätt färger på kanterna om du vill
             for (Vertex<String> v : graph.getAllVertices()) {

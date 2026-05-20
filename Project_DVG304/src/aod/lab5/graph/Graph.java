@@ -150,6 +150,27 @@ public class Graph<T> implements GraphInterface<T> {
         nEdges -= removedEdges;
     }
 
+    public List<Vertex<T>> getVerticesInArea(
+            double minX,
+            double maxX,
+            double minY,
+            double maxY) {
+
+        List<Vertex<T>> result = new ArrayList<>();
+
+        for (Vertex<T> vertex : vertices.values()) {
+
+            if (vertex.getX() >= minX &&
+                vertex.getX() <= maxX &&
+                vertex.getY() >= minY &&
+                vertex.getY() <= maxY) {
+
+                result.add(vertex);
+            }
+        }
+
+        return result;
+    }
   
     @Override
     public int numberOfEdges() {
