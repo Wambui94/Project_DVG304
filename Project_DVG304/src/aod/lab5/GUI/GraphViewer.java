@@ -7,7 +7,10 @@ import aod.lab5.graph.Edge;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-
+/**
+ * Davids kommenar
+ * @param <T>
+ */
 public class GraphViewer<T> extends JFrame {
 
     public GraphViewer(Graph<T> graph) {
