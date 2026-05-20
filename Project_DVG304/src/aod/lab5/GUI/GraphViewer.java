@@ -5,8 +5,12 @@ import aod.lab5.graph.Vertex;
 import aod.lab5.graph.Edge;
 
 import javax.swing.*;
+
+import algorithms.dijkstra;
+
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 /**
  * Davids kommenar
@@ -82,9 +86,9 @@ public class GraphViewer<T> extends JFrame {
             
         	Graph<String> graph = new Graph<>();
            	Random rand = new Random();
-        	for(int i = 0; i < 10; i++) {
+        	for(int i = 0; i < 5; i++) {
         		
-        		int x = 100 + rand.nextInt(500) - 50;
+        		int x = 100 + rand.nextInt(600) - 50;
         		int y = 100 + rand.nextInt(500) - 50;
         		
         		graph.addVertex(x, y, "STHLM" + i);
@@ -99,19 +103,22 @@ public class GraphViewer<T> extends JFrame {
         			
         		}
         	}
-        	
+        	   // Skapa Dijkstra
+            dijkstra<String> dijkstra = new dijkstra<>();
 
-            graph.addVertex(100, 100, "A");
-            graph.addVertex(200, 150, "B");
-            graph.addVertex(300, 100, "C");
+            // Beräkna kortaste vägar från Gävle
+            Map<String, Double> result =
+                    dijkstra.shortestPaths(graph, "STHLM0");
+            
+            for (String city : result.keySet()) {
 
-            graph.getAllVertices().get(0).setColor(Color.RED);
-            graph.getAllVertices().get(1).setColor(Color.BLUE);
-            graph.getAllVertices().get(2).setColor(Color.GREEN);
-
-            graph.addEdge("A", "B");
-            graph.addEdge("B", "C");
-            graph.addEdge("C", "A");
+                System.out.println(
+                    "Avstånd från STHLM0 till "
+                    + city
+                    + " = "
+                    + result.get(city)
+                );
+            }
 
             // Sätt färger på kanterna om du vill
             for (Vertex<String> v : graph.getAllVertices()) {
