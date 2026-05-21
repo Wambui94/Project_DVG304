@@ -149,7 +149,17 @@ public class Graph<T> implements GraphInterface<T> {
         nVertices--;
         nEdges -= removedEdges;
     }
-
+    
+    /**
+     * Checks if there are any vertices in a 
+     * specified, rectangular area
+     * 
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * @return a list of vertices
+     */
     public List<Vertex<T>> getVerticesInArea(
             double minX,
             double maxX,
