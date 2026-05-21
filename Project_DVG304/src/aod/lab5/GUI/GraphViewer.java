@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Top layer in GUI
+ * 
+ * @param <T>
+ */
 public class GraphViewer<T> extends JFrame {
 
     public GraphViewer(Graph<T> graph) {
