@@ -6,7 +6,7 @@ import aod.lab5.graph.Edge;
 
 import javax.swing.*;
 
-import algorithms.dijkstra;
+import algorithms.Dijkstra;
 
 import java.awt.*;
 import java.util.List;
@@ -155,7 +155,7 @@ public class GraphViewer<T> extends JFrame {
                 }
             }
 
-            dijkstra<String> dijkstra = new dijkstra<>();
+            Dijkstra<String> dijkstra = new Dijkstra<>();
 
             Map<String, Double> result =
                     dijkstra.shortestPaths(graph, "STHLM0");

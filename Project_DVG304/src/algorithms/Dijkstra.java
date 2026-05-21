@@ -1,12 +1,5 @@
-/**
- * 
- */
 package algorithms;
 
-/**
- * A class wtih the djikstra algorithm to
- * calculate distances between vertecies
- */
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,8 +9,12 @@ import java.util.Set;
 import aod.lab5.graph.Edge;
 import aod.lab5.graph.Graph;
 import aod.lab5.graph.Vertex;
-
-public class dijkstra<T> {
+/**
+ * A class wtih the djikstra algorithm to
+ * calculate distance between one vertex to
+ * all other vertices in a graph
+ */
+public class Dijkstra<T> {
 
     public Map<T, Double> shortestPaths(Graph<T> graph, T start) {
 
