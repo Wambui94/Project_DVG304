@@ -24,7 +24,7 @@ public class GraphTest {
         graph.addEdge("Stockholm", "Malmö");
 
         // Skapa Dijkstra
-        Dijkstra<String> dijkstra = new Dijkstra<>();
+        dijkstra<String> dijkstra = new dijkstra<>();
 
         // Beräkna kortaste vägar från Gävle
         Map<String, Double> result =
