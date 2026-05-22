@@ -3,7 +3,7 @@ package aod.lab5.GUI;
 import aod.lab5.graph.Graph;
 import aod.lab5.graph.Vertex;
 import aod.lab5.graph.Edge;
-import algorithms.dijkstra;
+import algorithms.Dijkstra;
 
 import javax.swing.*;
 import javax.imageio.ImageIO;
@@ -357,7 +357,7 @@ public class GraphViewer<T> extends JFrame {
     ) {
         clearEdgeColors(graph);
 
-        dijkstra<String> dijkstra = new dijkstra<>();
+        Dijkstra<String> dijkstra = new Dijkstra<>();
 
         Map<String, Double> distances =
                 dijkstra.shortestPaths(graph, start);

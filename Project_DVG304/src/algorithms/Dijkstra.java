@@ -6,7 +6,7 @@ import aod.lab5.graph.Edge;
 import aod.lab5.graph.Graph;
 import aod.lab5.graph.Vertex;
 
-public class dijkstra<T> {
+public class Dijkstra<T> {
 
     private Map<T, T> previous = new HashMap<>();
 
