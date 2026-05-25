@@ -1,76 +1,133 @@
 package tests;
+
+import java.util.List;
 import java.util.Random;
+
+import algorithms.Quadtree;
 import aod.lab5.graph.Graph;
+import aod.lab5.graph.Vertex;
 
 public class GraphStructureTimeComplexity_test {
 
+    public static void main(String[] args) {
 
-	
+        int[] sizes = {1000, 2000, 5000, 10000, 20000};
 
-	    public static void main(String[] args) {
+        for (int numberOfVertices : sizes) {
 
-	        int[] sizes = {1000, 2000, 5000, 10000, 20000};
+            Random rand = new Random(42);
 
-	        double edgeProbability = 0.001;
+            long startTime = System.nanoTime();
 
-	        for (int numberOfVertices : sizes) {
+            Graph<String> graph = new Graph<>();
 
-	            Random rand = new Random(42);
+            /*
+             * CREATE VERTICES
+             */
+            for (int i = 0; i < numberOfVertices; i++) {
 
-	            long startTime = System.nanoTime();
+                graph.addVertex(
+                        rand.nextInt(1000),
+                        rand.nextInt(1000),
+                        "V" + i
+                );
+            }
 
-	            Graph<String> graph = new Graph<>();
+            /*
+             * CONNECT USING QUADTREE
+             */
+            connectNearbyPoints(graph);
 
-	            /*
-	             * CREATE VERTICES
-	             */
-	            for (int i = 0; i < numberOfVertices; i++) {
+            long endTime = System.nanoTime();
 
-	                graph.addVertex(
-	                        rand.nextInt(1000),
-	                        rand.nextInt(1000),
-	                        "V" + i
-	                );
-	            }
+            double duration =
+                    (endTime - startTime) / 1_000_000.0;
 
-	            /*
-	             * CREATE EDGES
-	             */
-	            for (int i = 0; i < numberOfVertices; i++) {
+            System.out.println(
+                    "Vertices: "
+                            + numberOfVertices
+            );
 
-	                for (int j = i + 1;
-	                     j < numberOfVertices;
-	                     j++) {
+            System.out.println(
+                    "Graph structure time: "
+                            + duration
+                            + " ms"
+            );
 
-	                    if (rand.nextDouble() < edgeProbability) {
+            System.out.println("-------------------");
+        }
+    }
 
-	                        graph.addEdge(
-	                                "V" + i,
-	                                "V" + j
-	                        );
-	                    }
-	                }
-	            }
+    private static void connectNearbyPoints(
+            Graph<String> graph
+    ) {
 
-	            long endTime = System.nanoTime();
+        double maxDistance = 30.0;
 
-	            double duration =
-	                    (endTime - startTime) / 1_000_000.0;
+        Quadtree quadtree =
+                new Quadtree(
+                        new Quadtree.Rectangle(
+                                0,
+                                0,
+                                1000,
+                                1000
+                        ),
+                        4
+                );
 
-	            System.out.println(
-	                    "Vertices: "
-	                    + numberOfVertices
-	            );
+        /*
+         * INSERT ALL POINTS
+         */
+        for (Vertex<String> v : graph.getAllVertices()) {
 
-	            System.out.println(
-	                    "Graph structure time: "
-	                    + duration
-	                    + " ms"
-	            );
+            quadtree.insert(
+                    new Quadtree.Point(
+                            v.getX(),
+                            v.getY(),
+                            v.getInfo()
+                    )
+            );
+        }
 
-	            System.out.println("-------------------");
-	        }
-	    }
-	}
+        /*
+         * SEARCH NEARBY POINTS
+         */
+        for (Vertex<String> v1 : graph.getAllVertices()) {
 
+            Quadtree.Rectangle searchArea =
+                    new Quadtree.Rectangle(
+                            v1.getX() - maxDistance,
+                            v1.getY() - maxDistance,
+                            maxDistance * 2,
+                            maxDistance * 2
+                    );
 
+            List<Quadtree.Point> nearbyPoints =
+                    quadtree.query(searchArea);
+
+            for (Quadtree.Point p : nearbyPoints) {
+
+                /*
+                 * AVOID DUPLICATE EDGES
+                 */
+                if (v1.getInfo().compareTo(p.name) >= 0) {
+                    continue;
+                }
+
+                double dx = v1.getX() - p.x;
+                double dy = v1.getY() - p.y;
+
+                double distance =
+                        Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < maxDistance) {
+
+                    graph.addEdge(
+                            v1.getInfo(),
+                            p.name
+                    );
+                }
+            }
+        }
+    }
+}

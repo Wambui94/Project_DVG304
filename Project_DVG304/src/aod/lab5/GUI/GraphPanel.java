@@ -24,8 +24,6 @@ import aod.lab5.graph.Vertex;
 
 public class GraphPanel<T> extends JPanel {
 
-    private static final int MAP_WIDTH = 800;
-    private static final int MAP_HEIGHT = 600;
 	
     private final Graph<T> graph;
     private double zoom = 1.0;
@@ -56,7 +54,7 @@ public class GraphPanel<T> extends JPanel {
                 zoom /= 1.1;
             }
 
-            zoom = Math.max(0.2, Math.min(10.0, zoom));
+            zoom = Math.max(0.2, Math.min(30.0, zoom));
 
             double scale = zoom / oldZoom;
 
@@ -123,8 +121,8 @@ public class GraphPanel<T> extends JPanel {
                     swedenMap,
                     0,
                     0,
-                    MAP_WIDTH,
-                    MAP_HEIGHT,
+                    GraphViewer.MAP_WIDTH,
+                    GraphViewer.MAP_HEIGHT,
                     null
             );
         }
@@ -184,7 +182,7 @@ public class GraphPanel<T> extends JPanel {
             int textY = (int)(y1 + (y2 - y1) * 0.6);
 
             g2.setColor(Color.BLACK);
-            g2.setFont(new Font("Arial", Font.PLAIN, 1));
+            g2.setFont(new Font("Arial", Font.PLAIN, 2));
             g2.drawString(distStr, textX, textY);
         }
     }
@@ -219,7 +217,7 @@ public class GraphPanel<T> extends JPanel {
         );
 
         if (zoom >= 6.0) {
-            String label = v.getInfo().toString().replace("SE", "");
+            String label = v.getInfo().toString();
 
             g2.setColor(Color.WHITE);
             g2.setFont(new Font("Arial", Font.BOLD, 2));

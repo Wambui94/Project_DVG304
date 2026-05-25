@@ -4,6 +4,7 @@ import aod.lab5.graph.Graph;
 import aod.lab5.graph.Vertex;
 import aod.lab5.graph.Edge;
 import algorithms.Dijkstra;
+import algorithms.Quadtree;
 
 import javax.swing.*;
 import javax.imageio.ImageIO;
@@ -18,11 +19,11 @@ import java.util.Map;
 
 public class GraphViewer<T> extends JFrame {
 
-    private static final int MAP_WIDTH = 800;
-    private static final int MAP_HEIGHT = 600;
+    public static final int MAP_WIDTH = 800;
+    public static final int MAP_HEIGHT = 600;
 
     public GraphViewer(Graph<T> graph) {
-        setTitle("Sweden Graph Viewer");
+        setTitle("Mapping of server rooms and electrical centers in sweden");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(MAP_WIDTH, MAP_HEIGHT);
         setLocationRelativeTo(null);
@@ -37,8 +38,8 @@ public class GraphViewer<T> extends JFrame {
             String goalInput = JOptionPane.showInputDialog("End point example: 100");
 
             if (startInput != null && goalInput != null) {
-                String start = "SE" + startInput;
-                String goal = "SE" + goalInput;
+                String start = startInput;
+                String goal = goalInput;
 
                 showShortestPath((Graph<String>) graph, start, goal);
                 panel.repaint();
@@ -86,30 +87,11 @@ public class GraphViewer<T> extends JFrame {
                     }
                 }
 
-                graph.addVertex(x, y, "SE" + i);
+                graph.addVertex(x, y,""+ i);
             }
 
-            List<Vertex<String>> vertices = graph.getAllVertices();
-
-            for (int i = 0; i < vertices.size(); i++) {
-                Vertex<String> v1 = vertices.get(i);
-
-                for (int j = i + 1; j < vertices.size(); j++) {
-                    Vertex<String> v2 = vertices.get(j);
-
-                    double dx = v1.getX() - v2.getX();
-                    double dy = v1.getY() - v2.getY();
-
-                    double distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 30) {
-                        graph.addEdge(
-                                v1.getInfo(),
-                                v2.getInfo()
-                        );
-                    }
-                }
-            }
+            connectNearbyPoints(graph);
+            
 
             for (Vertex<String> v : graph.getAllVertices()) {
                 v.setColor(new Color(0, 120, 255, 180));
@@ -122,6 +104,77 @@ public class GraphViewer<T> extends JFrame {
             GraphViewer<String> viewer = new GraphViewer<>(graph);
             viewer.setVisible(true);
         });
+    }
+    
+    private static void connectNearbyPoints(Graph<String> graph) {
+
+        double maxDistance = 30.0;
+
+        Quadtree quadtree =
+                new Quadtree(
+                        new Quadtree.Rectangle(
+                                0,
+                                0,
+                                MAP_WIDTH,
+                                MAP_HEIGHT
+                        ),
+                        4
+                );
+
+        /*
+         * INSERT ALL VERTICES
+         */
+        for (Vertex<String> v : graph.getAllVertices()) {
+
+            quadtree.insert(
+                    new Quadtree.Point(
+                            v.getX(),
+                            v.getY(),
+                            v.getInfo()
+                    )
+            );
+        }
+
+        /*
+         * SEARCH NEARBY POINTS
+         */
+        for (Vertex<String> v1 : graph.getAllVertices()) {
+
+            Quadtree.Rectangle searchArea =
+                    new Quadtree.Rectangle(
+                            v1.getX() - maxDistance,
+                            v1.getY() - maxDistance,
+                            maxDistance * 2,
+                            maxDistance * 2
+                    );
+
+            List<Quadtree.Point> nearbyPoints =
+                    quadtree.query(searchArea);
+
+            for (Quadtree.Point p : nearbyPoints) {
+
+                /*
+                 * AVOID DUPLICATES
+                 */
+                if (v1.getInfo().compareTo(p.name) >= 0) {
+                    continue;
+                }
+
+                double dx = v1.getX() - p.x;
+                double dy = v1.getY() - p.y;
+
+                double distance =
+                        Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < maxDistance) {
+
+                    graph.addEdge(
+                            v1.getInfo(),
+                            p.name
+                    );
+                }
+            }
+        }
     }
 
     private static void showShortestPath(
@@ -213,8 +266,17 @@ public class GraphViewer<T> extends JFrame {
                 red < 80 && green < 80 && blue < 80;
 
         boolean orangeCityDot =
-                red > 180 && green > 80 && green < 180 && blue < 80;
+                red > 180 && green > 80 && green < 180 && blue < 100;
 
-        return !whiteBackground && !blackText && !orangeCityDot;
+        boolean blueSweden =
+                blue > 120
+                && green > 90
+                && green < 180
+                && red < 120;
+
+        return blueSweden
+                && !whiteBackground
+                && !blackText
+                && !orangeCityDot;
     }
 }
