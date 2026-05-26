@@ -45,9 +45,36 @@ public class GraphViewer<T> extends JFrame {
                 panel.repaint();
             }
         });
+        JButton nearestButton =
+                new JButton("Find nearest server hall");
 
-        add(shortestButton, BorderLayout.NORTH);
+        nearestButton.addActionListener(e -> {
+
+            String startInput =
+                    JOptionPane.showInputDialog(
+                            "Start point example: 70"
+                    );
+
+            if (startInput != null) {
+
+                findNearestServerHall(
+                        (Graph<String>) graph,
+                        startInput
+                );
+
+                panel.repaint();
+            }
+        });
+
+        JPanel buttonPanel = new JPanel();
+
+        buttonPanel.add(shortestButton);
+        buttonPanel.add(nearestButton);
+
+        add(buttonPanel, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
+        
+       
     }
 
 
@@ -238,6 +265,44 @@ public class GraphViewer<T> extends JFrame {
                 e.setColor(new Color(180, 180, 180, 120));
             }
         }
+    }
+    private static void findNearestServerHall(
+            Graph<String> graph,
+            String start
+    ) {
+        clearEdgeColors(graph);
+
+        Dijkstra<String> dijkstra =
+                new Dijkstra<>();
+
+        dijkstra.shortestPaths(graph, start);
+
+        String nearest =
+                dijkstra.getNearestPoint(start);
+
+        if (nearest == null) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "No nearest server hall found"
+            );
+            return;
+        }
+
+        colorEdge(graph, start, nearest, Color.RED);
+        colorEdge(graph, nearest, start, Color.RED);
+
+        JOptionPane.showMessageDialog(
+                null,
+                "Nearest server hall from "
+                        + start
+                        + " is "
+                        + nearest
+                        + "\nDistance: "
+                        + String.format(
+                                "%.1f",
+                                dijkstra.getDistanceTo(nearest)
+                        )
+        );
     }
 
     private static boolean isLandPixel(

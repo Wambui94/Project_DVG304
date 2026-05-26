@@ -18,6 +18,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import algorithms.Quadtree;
 import aod.lab5.graph.Edge;
 import aod.lab5.graph.Graph;
 import aod.lab5.graph.Vertex;
@@ -234,6 +235,7 @@ public class GraphPanel<T> extends JPanel {
             );
         }
     }
+    
 
     private boolean isVisible(Vertex<T> v) {
         double visibleLeft = -offsetX / zoom;
@@ -248,5 +250,18 @@ public class GraphPanel<T> extends JPanel {
                 && x <= visibleRight
                 && y >= visibleTop
                 && y <= visibleBottom;
+    }
+    private void drawQuadtree(Graphics2D g2, Quadtree quadtree) {
+        g2.setColor(new Color(255, 0, 0, 80));
+        g2.setStroke(new BasicStroke(0.3f));
+
+        for (Quadtree.Rectangle r : quadtree.getAllBoundaries()) {
+            g2.drawRect(
+                    (int) r.x,
+                    (int) r.y,
+                    (int) r.width,
+                    (int) r.height
+            );
+        }
     }
 }

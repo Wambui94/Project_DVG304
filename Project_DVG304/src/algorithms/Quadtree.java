@@ -147,4 +147,20 @@ public class Quadtree {
                     || other.y + other.height < y);
         }
     }
+    public List<Rectangle> getAllBoundaries() {
+        List<Rectangle> rectangles = new ArrayList<>();
+        collectBoundaries(rectangles);
+        return rectangles;
+    }
+
+    private void collectBoundaries(List<Rectangle> rectangles) {
+        rectangles.add(boundary);
+
+        if (divided) {
+            northWest.collectBoundaries(rectangles);
+            northEast.collectBoundaries(rectangles);
+            southWest.collectBoundaries(rectangles);
+            southEast.collectBoundaries(rectangles);
+        }
+    }
 }

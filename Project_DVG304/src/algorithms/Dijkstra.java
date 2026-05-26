@@ -18,6 +18,7 @@ public class Dijkstra<T> {
 	// A -> B -> C -> D
 	// [B -> A] [ C -> B] ...
     private Map<T, T> previous = new HashMap<>();
+    private Map<T, Double> distances;
     /**
      * Calculates the shortest path to all nodes in a graph
      * from a starting node.
@@ -28,7 +29,7 @@ public class Dijkstra<T> {
      */
     public Map<T, Double> shortestPaths(Graph<T> graph, T start) {
 
-        Map<T, Double> distances = new HashMap<>();
+        distances = new HashMap<>(); //distances remain available after the algorithm finishes
         Set<T> visited = new HashSet<>(); // single instances, faster
         previous.clear();	// reset from earlier runs
         
@@ -94,5 +95,54 @@ public class Dijkstra<T> {
         Collections.reverse(path);
 
         return path;
+    }
+    
+    /**
+     * Finds the nearest reachable vertex from the given start vertex.
+     *
+     * This method uses the distances already calculated by shortestPaths().
+     * It does not run Dijkstra again.
+     *
+     * @param start the vertex we started from
+     * @return the nearest vertex, or null if none was found
+     */
+    public T getNearestPoint(T start) {
+
+        T nearest = null;
+
+        double shortestDistance =
+                Double.MAX_VALUE;
+
+        for (T point : distances.keySet()) {
+
+            /*
+             * Skip the start node itself
+             */
+            if (point.equals(start)) {
+                continue;
+            }
+
+            double distance =
+                    distances.get(point);
+
+            /*
+             * Find smallest distance
+             */
+            if (distance < shortestDistance) {
+
+                shortestDistance = distance;
+                nearest = point;
+            }
+        }
+
+        return nearest;
+    }
+    public double getDistanceTo(T point) {
+
+        if (!distances.containsKey(point)) {
+            return Double.MAX_VALUE;
+        }
+
+        return distances.get(point);
     }
 }
