@@ -3,6 +3,15 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A quadtree used for spatial partitioning of points.
+ *
+ * The quadtree divides a rectangular area into smaller
+ * regions when the number of stored points exceeds
+ * the given capacity.
+ *
+ * It is used to find nearby points efficiently.
+ */
 public class Quadtree {
 
     private Rectangle boundary;
@@ -16,6 +25,12 @@ public class Quadtree {
 
     private boolean divided;
 
+    /**
+     * Creates a new quadtree.
+     *
+     * @param boundary the area covered by this quadtree
+     * @param capacity maximum number of points before subdivision
+     */
     public Quadtree(Rectangle boundary, int capacity) {
         this.boundary = boundary;
         this.capacity = capacity;
@@ -23,6 +38,12 @@ public class Quadtree {
         this.divided = false;
     }
 
+    /**
+     * Inserts a point into the quadtree.
+     *
+     * @param point the point to insert
+     * @return true if the point was inserted, otherwise false
+     */
     public boolean insert(Point point) {
         if (!boundary.contains(point)) {
             return false;
@@ -80,6 +101,12 @@ public class Quadtree {
         divided = true;
     }
 
+    /**
+     * Finds all points inside a given rectangular area.
+     *
+     * @param area the area to search within
+     * @return list of points inside the area
+     */
     public List<Point> query(Rectangle area) {
         List<Point> result = new ArrayList<>();
 
@@ -103,6 +130,9 @@ public class Quadtree {
         return result;
     }
 
+    /**
+     * Represents a point stored in the quadtree.
+     */
     public static class Point {
         public double x;
         public double y;
@@ -120,6 +150,14 @@ public class Quadtree {
         }
     }
 
+    /**
+     * Creates a new rectangle.
+     *
+     * @param x x-coordinate of the top-left corner
+     * @param y y-coordinate of the top-left corner
+     * @param width rectangle width
+     * @param height rectangle height
+     */
     public static class Rectangle {
         public double x;
         public double y;
@@ -133,6 +171,12 @@ public class Quadtree {
             this.height = height;
         }
 
+        /**
+         * Checks if a point is inside the rectangle.
+         *
+         * @param point the point to check
+         * @return true if the point is inside
+         */
         public boolean contains(Point point) {
             return point.x >= x
                     && point.x < x + width
@@ -140,6 +184,12 @@ public class Quadtree {
                     && point.y < y + height;
         }
 
+        /**
+         * Checks if this rectangle overlaps another rectangle.
+         *
+         * @param other the other rectangle
+         * @return true if the rectangles overlap
+         */
         public boolean intersects(Rectangle other) {
             return !(other.x > x + width
                     || other.x + other.width < x
@@ -147,12 +197,23 @@ public class Quadtree {
                     || other.y + other.height < y);
         }
     }
+    
+    /**
+     * Returns all quadtree region boundaries.
+     *
+     * @return list of all rectangle boundaries
+     */
     public List<Rectangle> getAllBoundaries() {
         List<Rectangle> rectangles = new ArrayList<>();
         collectBoundaries(rectangles);
         return rectangles;
     }
 
+    /**
+     * Collects all region boundaries recursively.
+     *
+     * @param rectangles list where boundaries are stored
+     */
     private void collectBoundaries(List<Rectangle> rectangles) {
         rectangles.add(boundary);
 

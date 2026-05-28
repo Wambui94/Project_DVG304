@@ -7,10 +7,16 @@ import aod.lab5.graph.Graph;
 import aod.lab5.graph.Vertex;
 
 /**
- * Calculating the shortest distance
- * between nodes/vertices
- * 
- * @param <T> the nodes can contain any type
+ * Implements Dijkstra's algorithm for a weighted graph.
+ *
+ * This class calculates the shortest distances from one start vertex
+ * to all reachable vertices in the graph. It also stores previous
+ * vertices so that the shortest path can be reconstructed afterwards.
+ *
+ * The class is used to find the shortest path between server halls
+ * or electrical centers in the graph.
+ *
+ * @param <T> the type of data stored in each vertex
  */
 public class Dijkstra<T> {
 	

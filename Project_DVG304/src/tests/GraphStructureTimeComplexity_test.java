@@ -11,7 +11,7 @@ public class GraphStructureTimeComplexity_test {
 
     public static void main(String[] args) {
 
-        int[] sizes = {1000, 2000, 5000, 10000, 20000};
+        int[] sizes = {1000, 2000, 5000, 10000, 20000, 40000};
 
         for (int numberOfVertices : sizes) {
 

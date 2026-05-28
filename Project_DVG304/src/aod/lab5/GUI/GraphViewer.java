@@ -17,6 +17,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.Map;
 
+/**
+ * Main window for visualizing the graph on top of a map of Sweden.
+ *
+ * This class creates the graph, generates random vertices on valid land
+ * pixels, connects nearby vertices, and displays the result in a GUI.
+ * It also contains buttons for showing the shortest path and finding
+ * the nearest server hall using Dijkstra's algorithm.
+ *
+ * @param <T> the type of data stored in each vertex
+ */
 public class GraphViewer<T> extends JFrame {
 
     public static final int MAP_WIDTH = 800;
@@ -95,6 +105,8 @@ public class GraphViewer<T> extends JFrame {
                         );
 
                 mapImage = ImageIO.read(mapUrl);
+                //System.out.println(mapImage.getWidth());
+                //System.out.println(mapImage.getHeight());
 
             } catch (IOException | IllegalArgumentException e) {
                 System.out.println("Could not load map for point generation");
@@ -132,7 +144,8 @@ public class GraphViewer<T> extends JFrame {
             viewer.setVisible(true);
         });
     }
-    
+   
+  
     private static void connectNearbyPoints(Graph<String> graph) {
 
         double maxDistance = 30.0;
@@ -204,6 +217,7 @@ public class GraphViewer<T> extends JFrame {
         }
     }
 
+   
     private static void showShortestPath(
             Graph<String> graph,
             String start,
@@ -246,6 +260,14 @@ public class GraphViewer<T> extends JFrame {
         );
     }
 
+    /**
+    Changes the color of an edge.
+
+    @param graph the graph
+    @param from the start vertex
+    @param to the destination vertex
+    @param color the new color
+    */
     private static void colorEdge(
             Graph<String> graph,
             String from,
@@ -266,6 +288,8 @@ public class GraphViewer<T> extends JFrame {
             }
         }
     }
+    
+   
     private static void findNearestServerHall(
             Graph<String> graph,
             String start
@@ -305,6 +329,14 @@ public class GraphViewer<T> extends JFrame {
         );
     }
 
+    /**
+    Checks if a pixel represents land.
+
+    @param image the map image
+    @param x the x-coordinate
+    @param y the y-coordinate
+    @return true if land, otherwise false
+    */
     private static boolean isLandPixel(
             BufferedImage image,
             int x,

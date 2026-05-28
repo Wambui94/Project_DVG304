@@ -9,7 +9,7 @@ public class DijkstraTimeComplexity_test {
 
     public static void main(String[] args) {
 
-        int[] sizes = {1000, 2000, 5000, 10000, 20000};
+        int[] sizes = {1000, 2000, 5000, 10000, 20000, 40000, 80000};
 
         double edgeProbability = 0.001;
 
